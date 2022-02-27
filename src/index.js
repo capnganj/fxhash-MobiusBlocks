@@ -34,29 +34,50 @@ window.$fxhashFeatures = {
 console.log(fxhash)   // the 64 chars hex number fed to your algorithm
 console.log(fxrand()) // deterministic PRNG function, use it instead of Math.random()
 
-const camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
-camera.position.z = 10;
+let scene = new THREE.Scene();
 
-const scene = new THREE.Scene();
+let renderer = new THREE.WebGLRenderer( { antialias: true } );
+renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
 
-const geometry = new ParametricGeometry( ParametricGeometries.mobius3d, 100, 100 );
-const material = new THREE.MeshNormalMaterial();
+let camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+camera.position.set( 0, 0, 10 );
+
+// controls
+let controls = new OrbitControls( camera, renderer.domElement );
+
+const geometry = new ParametricGeometry( ParametricGeometries.klein, 100, 100 );
+const material = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
 
 const mesh = new THREE.Mesh( geometry, material );
 scene.add( mesh );
 
-const renderer = new THREE.WebGLRenderer( { antialias: true } );
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setAnimationLoop( animation );
-document.body.appendChild( renderer.domElement );
-
+window.addEventListener( 'resize', onWindowResize );
+animate();
 // animation
 
-function animation( time ) {
+function onWindowResize() {
 
-	mesh.rotation.x = time / 2000;
-	mesh.rotation.y = time / 1000;
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
 
-	renderer.render( scene, camera );
+  renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+function animate() {
+
+  requestAnimationFrame( animate );
+
+  controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
+
+  render();
+
+}
+
+function render() {
+
+  renderer.render( scene, camera );
 
 }
