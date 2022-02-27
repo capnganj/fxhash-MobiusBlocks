@@ -10,6 +10,7 @@
     "start": "webpack serve --config ./config/webpack.config.dev.js"
   },
   "dependencies": {
+    "three": "0.138.0",
     "d3": "7.3.0",
     "d3-scale-chromatic": "3.0.0"
   },
