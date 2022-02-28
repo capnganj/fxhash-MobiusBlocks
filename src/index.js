@@ -2,16 +2,17 @@
 //February, 2022
 
 //imports
-import { HashSmokeFeatures } from './hashSmokerFeatures';
+import { StonerSculpturesFeatures } from './StonerSculpturesFeatures';
 
 import * as THREE from 'three';
-import { ParametricGeometry } from 'three/examples/jsm/geometries/ParametricGeometry';
-import { ParametricGeometries } from 'three/examples/jsm/geometries/ParametricGeometries';
+import { ParametricGeometry } from './ParametricGeometry';
+import { ParametricGeometries } from './ParametricGeometries';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-
+//1) - generate fxhash features - global driving parameters
 //new featuresClass
-let feet = new HashSmokeFeatures();
+let feet = new StonerSculpturesFeatures();
+window.$fxhashData = feet;
 
 //color drives palette
 //depth drives number of recursive draw cloud layers
@@ -21,19 +22,25 @@ let feet = new HashSmokeFeatures();
 
 // FX Features
 window.$fxhashFeatures = {
-  "Depth" : feet.depth.tag,
   "Palette" : feet.color.name,
-  "Cough" : feet.cough.tag,
-  "Squint": feet.squint.tag,
-  "Laugh" : feet.laugh.tag
+  "Major" : feet.major.tag,
+  "A" : feet.a.tag,
+  "B": feet.b.tag
 };
 
 
 //from fxhash webpack boilerplate
 // these are the variables you can use as inputs to your algorithms
-console.log(fxhash)   // the 64 chars hex number fed to your algorithm
-console.log(fxrand()) // deterministic PRNG function, use it instead of Math.random()
+//console.log(fxhash)   // the 64 chars hex number fed to your algorithm
+//console.log(fxrand()) // deterministic PRNG function, use it instead of Math.random()
+console.log("fxhash features", window.$fxhashFeatures);
 
+
+//2) generate random data for the 3d scene or 2d drawing ONCE before drawing
+
+
+//3) Initialize three.js scene and start the render loop
+//all data driving geometry and materials and whatever else should be generated in step 2
 let scene = new THREE.Scene();
 
 let renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -42,12 +49,12 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 let camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-camera.position.set( 0, 0, 10 );
+camera.position.set( 3, 3, 3 );
 
 // controls
 let controls = new OrbitControls( camera, renderer.domElement );
 
-const geometry = new ParametricGeometry( ParametricGeometries.klein, 100, 100 );
+const geometry = new ParametricGeometry( ParametricGeometries.mobius3d, 100, 100);
 const material = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
 
 const mesh = new THREE.Mesh( geometry, material );

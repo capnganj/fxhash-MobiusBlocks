@@ -1,6 +1,6 @@
 import { interpolateCool, interpolateInferno, interpolateMagma, interpolateWarm, interpolateViridis } from 'd3-scale-chromatic'
 
-class HashSmokeFeatures {
+class StonerSculpturesFeatures {
     constructor() {
 
         //color scheme 
@@ -9,32 +9,27 @@ class HashSmokeFeatures {
         };
         this.setColor();
 
-        //drives nummber of circles
-        this.depth = {
+        //drives major parameter of mobius 3d geometry
+        this.major = {
             tag: "",
             value: ""
         }
-        this.setDepth();
+        this.setMajor();
 
-        //min and max initial radius multiplier
-        this.cough = {
+        //drives a parameter of mobius 3d geometry
+        this.a = {
             tag: "",
             value: ""
         };
-        this.setCough();
+        this.setA();
 
-        //min and max radius factor in new branch
-        this.squint = {
+        //drives a parameter of mobius 3d geometry
+        this.b = {
             tag: "",
             value: ""
         };
-
-        //spread factor
-        this.laugh =  {
-            tag: "",
-            value: ""
-        };
-        this.setSquintAndLaugh();
+        this.setB();
+        
 
     }
 
@@ -48,6 +43,11 @@ class HashSmokeFeatures {
             default:
                 return "high"
         }
+    }
+
+    map(n, start1, stop1, start2, stop2){
+        const newval = (n - start1) / (stop1 - start1) * (stop2 - start2) + start2;
+        return newval;
     }
 
     setColor(){
@@ -70,55 +70,47 @@ class HashSmokeFeatures {
         }
     }
 
-    setDepth(){
+    setMajor(){
         let t = fxrand();
-        this.depth.value = t;
+        this.major.value = this.map(t, 0, 1, 1.0, 1.5);
 
         //set feature tag value
         if (t < 0.15) {
-            this.depth.tag = "Weak"
-            this.depth.value = 6
+            this.major.tag = "Shallow"
         }
         else if ( t < 0.85) {
-            this.depth.tag = "Nice"
-            this.depth.value = 7
+            this.major.tag = "Medium"
         }
         else {
-            this.depth.tag = "Huge"
-            this.depth.value = 8
+            this.major.tag = "Deep"
         }
     }
 
-    setCough(){
+    setA(){
         let c = fxrand();
-        this.cough.value = c;
+        this.a.value = this.map(c, 0, 1, 0.25, 0.5);
 
         //set feature tag values
-        if (c < 0.4) this.cough.tag = "Smooth";
-        else if (c < 0.6) this.cough.tag = "Wheeze";
-        else if (c < 0.85) this.cough.tag = "Cough";
-        else this.cough.tag = "Hack"
+        if (c < 0.4) this.a.tag = "Flat";
+        else if (c < 0.6) this.a.tag = "Smooth";
+        else if (c < 0.85) this.a.tag = "Bulge";
+        else this.a.tag = "Bloat"
 
 
     }
 
-    setSquintAndLaugh(){
-        let s = fxrand();
-        let l = fxrand();
-        this.squint.value = s;
-        this.laugh.value = l;
+    setB(){
+        let c = fxrand();
+        this.b.value = this.map(c, 0, 1, 0.7, 0.9);
 
         //set feature tag values
-        if (s < 0.4) this.squint.tag = "None";
-        else if (s < 0.6) this.squint.tag = "Stoner Eyes";
-        else if (s < 0.85) this.squint.tag = "Squinty";
-        else this.squint.tag = "Eyes Closed"
+        if (c < 0.4) this.b.tag = "Smooth";
+        else if (c < 0.6) this.b.tag = "Wheeze";
+        else if (c < 0.85) this.b.tag = "a";
+        else this.b.tag = "Hack"
 
-        if (l < 0.5) this.laugh.tag = "Chuckle";
-        else if (l < 0.75) this.laugh.tag = "Hearty";
-        else if (l < 0.9) this.laugh.tag = "Belly";
-        else this.laugh.tag = "Can't stop laughing";
+
     }
 }
 
-export {HashSmokeFeatures}
+export {StonerSculpturesFeatures}
