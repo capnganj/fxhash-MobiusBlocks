@@ -12,6 +12,7 @@
   "dependencies": {
     "three": "0.138.0",
     "d3": "7.3.0",
+    "d3-color": "3.0.1",
     "d3-scale-chromatic": "3.0.0"
   },
   "devDependencies": {

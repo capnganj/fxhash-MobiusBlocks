@@ -1,4 +1,5 @@
 import { interpolateCool, interpolateInferno, interpolateMagma, interpolateWarm, interpolateViridis } from 'd3-scale-chromatic'
+import { rgb } from 'd3-color';
 
 class StonerSculpturesFeatures {
     constructor() {
@@ -35,11 +36,11 @@ class StonerSculpturesFeatures {
 
     interpolateFn(val){
         switch (this.color.name) {
-            case "Cool": return interpolateCool(val);
-            case "Warm": return interpolateWarm(val);
-            case "Viridis": return interpolateViridis(val);
-            case "Magma": return interpolateMagma(val);
-            case "Inferno": return interpolateInferno(val);
+            case "Cool": return rgb(interpolateCool(val));
+            case "Warm": return rgb(interpolateWarm(val));
+            case "Viridis": return rgb(interpolateViridis(val));
+            case "Magma": return rgb(interpolateMagma(val));
+            case "Inferno": return rgb(interpolateInferno(val));
             default:
                 return "high"
         }
@@ -104,10 +105,10 @@ class StonerSculpturesFeatures {
         this.b.value = this.map(c, 0, 1, 0.7, 0.9);
 
         //set feature tag values
-        if (c < 0.4) this.b.tag = "Smooth";
-        else if (c < 0.6) this.b.tag = "Wheeze";
-        else if (c < 0.85) this.b.tag = "a";
-        else this.b.tag = "Hack"
+        if (c < 0.4) this.b.tag = "Short";
+        else if (c < 0.6) this.b.tag = "Normal";
+        else if (c < 0.85) this.b.tag = "Tall";
+        else this.b.tag = "Stretch"
 
 
     }
