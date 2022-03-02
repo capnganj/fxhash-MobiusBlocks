@@ -24,16 +24,29 @@ class StonerSculpturesFeatures {
         };
         this.setA();
 
-        //drives a parameter of mobius 3d geometry
+        //drives b parameter of mobius 3d geometry
         this.b = {
             tag: "",
             value: ""
         };
         this.setB();
         
+        //drives size of voxelish box geometry
+        this.boxSize = {
+            tag: "",
+            value: ""
+        }
+
+        //drives material shuffle / pixelation behavior
+        this.shuffle = {
+            tag: "",
+            value: ""
+        }
+        this.setShuffle();
 
     }
 
+    //color palette interpolation
     interpolateFn(val){
         switch (this.color.name) {
             case "Cool": return rgb(interpolateCool(val));
@@ -46,6 +59,7 @@ class StonerSculpturesFeatures {
         }
     }
 
+    //map function logic from processing <3
     map(n, start1, stop1, start2, stop2){
         const newval = (n - start1) / (stop1 - start1) * (stop2 - start2) + start2;
         return newval;
@@ -111,6 +125,17 @@ class StonerSculpturesFeatures {
         else this.b.tag = "Stretch"
 
 
+    }
+
+    setShuffle(){
+        let sh = fxrand();
+        this.shuffle.value = this.map(sh, 0, 1, 0.25, 0.9);
+
+        //tags
+        if (sh < 0.35) this.shuffle.tag = "Smooth";
+        else if( sh < 0.65) this.shuffle.tag = "Medium";
+        else if( sh < 0.85) this.shuffle.tag = "High";
+        else this.shuffle.tag = "Shuffled!"
     }
 }
 
