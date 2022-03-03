@@ -36,6 +36,7 @@ class StonerSculpturesFeatures {
             tag: "",
             value: ""
         }
+        this.setBoxSize();
 
         //drives material shuffle / pixelation behavior
         this.shuffle = {
@@ -87,7 +88,7 @@ class StonerSculpturesFeatures {
 
     setMajor(){
         let t = fxrand();
-        this.major.value = this.map(t, 0, 1, 1.0, 1.5);
+        this.major.value = this.map(t, 0, 1, 1.33, 1.75);
 
         //set feature tag value
         if (t < 0.15) {
@@ -103,7 +104,7 @@ class StonerSculpturesFeatures {
 
     setA(){
         let c = fxrand();
-        this.a.value = this.map(c, 0, 1, 0.25, 0.5);
+        this.a.value = this.map(c, 0, 1, 0.1, 0.25);
 
         //set feature tag values
         if (c < 0.4) this.a.tag = "Flat";
@@ -116,7 +117,7 @@ class StonerSculpturesFeatures {
 
     setB(){
         let c = fxrand();
-        this.b.value = this.map(c, 0, 1, 0.7, 0.9);
+        this.b.value = this.map(c, 0, 1, 0.5, 0.8);
 
         //set feature tag values
         if (c < 0.4) this.b.tag = "Short";
@@ -125,6 +126,15 @@ class StonerSculpturesFeatures {
         else this.b.tag = "Stretch"
 
 
+    }
+
+    setBoxSize(){
+        let b = fxrand();
+        this.boxSize.value = this.map(b, 0, 1, 0.2, 0.3);
+
+        if(b<0.33) this.boxSize.tag = "Small";
+        else if(b<0.75) this.boxSize.tag = "Medium";
+        else this.boxSize.tag = "Large";
     }
 
     setShuffle(){

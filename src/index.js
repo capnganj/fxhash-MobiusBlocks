@@ -26,7 +26,8 @@ window.$fxhashFeatures = {
   "Major" : feet.major.tag,
   "A" : feet.a.tag,
   "B": feet.b.tag,
-  "Shuffle": feet.shuffle.tag
+  "Shuffle": feet.shuffle.tag,
+  "Box Size": feet.boxSize.tag
 };
 
 
@@ -88,7 +89,7 @@ for (let i = 0; i < 1; i+=0.01) {
 }
 
 //box geometry to hang on points
-const boxer = new THREE.BoxGeometry(0.25, 0.25, 0.25);
+const boxer = new THREE.BoxGeometry(feet.boxSize.value, feet.boxSize.value, feet.boxSize.value);
 
 //loop over geometry points and make boxes
 for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
