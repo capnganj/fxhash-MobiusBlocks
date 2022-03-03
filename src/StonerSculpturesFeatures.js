@@ -52,6 +52,13 @@ class StonerSculpturesFeatures {
             value2: ""
         }
         this.setDensity();
+
+        //drives rotation of boxes
+        this.rotation = {
+            tag: "",
+            value: ""
+        }
+        this.setRotation();
     }
 
     //color palette interpolation
@@ -157,12 +164,21 @@ class StonerSculpturesFeatures {
 
     setDensity(){
         let d = fxrand();
-        this.density.value1 = this.map(d, 0, 1, 50, 65);
-        this.density.value2 = this.map(d, 0, 1, 80, 120);
+        this.density.value1 = this.map(d, 0, 1, 40, 65);
+        this.density.value2 = this.map(d, 0, 1, 90, 120);
 
         if( d < 0.35 ) this.density.tag = "Sparse";
         else if ( d < 0.8 ) this.density.tag = "Medium";
         else this.density.tag = "Dense";
+    }
+
+    setRotation(){
+        let r = fxrand();
+        this.rotation.value = this.map(r, 0, 1, 0.5, 1.5);
+        
+        if( r < 0.4) this.rotation.tag = "Gradual";
+        else if( r < 0.8 ) this.rotation.tag = "Steady";
+        else this.rotation.tag = "Rapid";
     }
 }
 

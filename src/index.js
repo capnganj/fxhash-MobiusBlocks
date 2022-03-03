@@ -120,9 +120,9 @@ for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
   obj.position.y =  geometry.attributes.position.array[i+1];
   obj.position.z =  geometry.attributes.position.array[i+2];
 
-  obj.rotation.x = geometry.attributes.position.array[i];
-  obj.rotation.y = geometry.attributes.position.array[i+1];
-  obj.rotation.z = geometry.attributes.position.array[i+2];
+  obj.rotation.x = geometry.attributes.position.array[i] * feet.rotation.value;
+  obj.rotation.y = geometry.attributes.position.array[i+1] * feet.rotation.value;
+  obj.rotation.z = geometry.attributes.position.array[i+2] * feet.rotation.value;
   scene.add(obj);
 }
 
