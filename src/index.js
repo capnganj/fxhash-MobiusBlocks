@@ -27,7 +27,8 @@ window.$fxhashFeatures = {
   "A" : feet.a.tag,
   "B": feet.b.tag,
   "Shuffle": feet.shuffle.tag,
-  "Box Size": feet.boxSize.tag
+  "Box Size": feet.boxSize.tag,
+  "Density": feet.density.tag
 };
 
 
@@ -71,7 +72,7 @@ scene.add(amb);
 let controls = new OrbitControls( camera, renderer.domElement );
 
 //parametric geometry provides points for boxes
-const geometry = new ParametricGeometry( ParametricGeometries.mobius3d,75, 75 );
+const geometry = new ParametricGeometry( ParametricGeometries.mobius3d,feet.density.value2, feet.density.value1 );
 geometry.rotateY(0.25);
 geometry.computeBoundingBox();
 

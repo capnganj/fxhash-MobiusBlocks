@@ -45,6 +45,13 @@ class StonerSculpturesFeatures {
         }
         this.setShuffle();
 
+        //drives how many subdivisions in the surface
+        this.density = {
+            tag: "",
+            value1: "",
+            value2: ""
+        }
+        this.setDensity();
     }
 
     //color palette interpolation
@@ -69,16 +76,16 @@ class StonerSculpturesFeatures {
     setColor(){
         let c = fxrand();
         
-        if( c < 0.5){
+        if( c < 0.15){
             this.color.name = "Warm"
         }
-        else if( c < 0.65){
+        else if( c < 0.25){
             this.color.name = "Cool"
         }
-        else if( c < 0.8){
+        else if( c < 0.5){
             this.color.name = "Viridis"
         }
-        else if( c < 0.9){
+        else if( c < 0.7){
             this.color.name = "Magma"
         }
         else {
@@ -130,7 +137,7 @@ class StonerSculpturesFeatures {
 
     setBoxSize(){
         let b = fxrand();
-        this.boxSize.value = this.map(b, 0, 1, 0.2, 0.3);
+        this.boxSize.value = this.map(b, 0, 1, 0.1, 0.2);
 
         if(b<0.33) this.boxSize.tag = "Small";
         else if(b<0.75) this.boxSize.tag = "Medium";
@@ -146,6 +153,16 @@ class StonerSculpturesFeatures {
         else if( sh < 0.65) this.shuffle.tag = "Medium";
         else if( sh < 0.85) this.shuffle.tag = "High";
         else this.shuffle.tag = "Shuffled!"
+    }
+
+    setDensity(){
+        let d = fxrand();
+        this.density.value1 = this.map(d, 0, 1, 50, 65);
+        this.density.value2 = this.map(d, 0, 1, 80, 120);
+
+        if( d < 0.35 ) this.density.tag = "Sparse";
+        else if ( d < 0.8 ) this.density.tag = "Medium";
+        else this.density.tag = "Dense";
     }
 }
 
