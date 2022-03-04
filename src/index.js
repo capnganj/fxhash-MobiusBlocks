@@ -39,7 +39,10 @@ window.$fxhashFeatures = {
 //scene & camera
 let scene = new THREE.Scene();
 
-let renderer = new THREE.WebGLRenderer( { antialias: true } );
+let renderer = new THREE.WebGLRenderer( { 
+  antialias: true,
+  alpha: true 
+} );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
@@ -74,8 +77,10 @@ const material = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
 
 //array of mesh phong materials
 let materials = [];
+let colors = [];
 for (let i = 0; i < 1; i+=0.01) {
   const d3RgbColor = feet.interpolateFn(i);
+  colors.push(d3RgbColor);
   const mat = new THREE.MeshLambertMaterial({
     color: new THREE.Color(d3RgbColor.r, d3RgbColor.g, d3RgbColor.b)
   });
@@ -119,13 +124,20 @@ for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
   scene.add(obj);
 }
 
-//const mesh = new THREE.Mesh( geometry, material );
-//scene.add( mesh );
+//set the background colors 
+let bod = document.body;
+const rot = feet.map(fxrand(),0,1,-30,30).toString();
+const start = Math.round(feet.map(fxrand(),0,1,30,40));
+const stop = Math.round(feet.map(fxrand(),0,1,60,70));
+bod.style.backgroundImage = 'linear-gradient(' + rot + 'deg,' + feet.invertColor(colors[start]) + ',' + feet.invertColor(colors[stop]) + ')' 
 
+//set up resize listener and let it rip!
 window.addEventListener( 'resize', onWindowResize );
 animate();
-// animation
 
+
+
+// animation
 function onWindowResize() {
 
   camera.aspect = window.innerWidth / window.innerHeight;
