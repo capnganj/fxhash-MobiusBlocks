@@ -234,8 +234,15 @@ function animate() {
 
 }
 
+let previewed = false;
+
 function render() {
 
   renderer.render( scene, camera );
+
+  if(!previewed){
+    fxpreview();
+    previewed = true;
+  } 
 
 }
