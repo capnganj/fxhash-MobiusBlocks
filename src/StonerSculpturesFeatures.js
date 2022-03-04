@@ -144,7 +144,7 @@ class StonerSculpturesFeatures {
 
     setBoxSize(){
         let b = fxrand();
-        this.boxSize.value = this.map(b, 0, 1, 0.1, 0.2);
+        this.boxSize.value = this.map(b, 0, 1, 0.15, 0.23);
 
         if(b<0.33) this.boxSize.tag = "Small";
         else if(b<0.75) this.boxSize.tag = "Medium";
@@ -165,7 +165,7 @@ class StonerSculpturesFeatures {
     setDensity(){
         let d = fxrand();
         this.density.value1 = this.map(d, 0, 1, 40, 65);
-        this.density.value2 = this.map(d, 0, 1, 90, 120);
+        this.density.value2 = this.map(d, 0, 1, 110, 135);
 
         if( d < 0.35 ) this.density.tag = "Sparse";
         else if ( d < 0.8 ) this.density.tag = "Medium";

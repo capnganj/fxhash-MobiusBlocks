@@ -14,18 +14,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 let feet = new StonerSculpturesFeatures();
 window.$fxhashData = feet;
 
-//color drives palette
-//depth drives number of recursive draw cloud layers
-//cough drives initial circle radius size
-//squint drives smallest circle radius size
-//laugh drives how far the could spreads out from the center 
-
 // FX Features
 window.$fxhashFeatures = {
   "Palette" : feet.color.name,
-  "Major" : feet.major.tag,
-  "A" : feet.a.tag,
-  "B": feet.b.tag,
+  "Size" : feet.major.tag,
+  "Thickness" : feet.a.tag,
+  "Height": feet.b.tag,
   "Shuffle": feet.shuffle.tag,
   "Box Size": feet.boxSize.tag,
   "Density": feet.density.tag
@@ -36,13 +30,10 @@ window.$fxhashFeatures = {
 // these are the variables you can use as inputs to your algorithms
 //console.log(fxhash)   // the 64 chars hex number fed to your algorithm
 //console.log(fxrand()) // deterministic PRNG function, use it instead of Math.random()
-console.log("fxhash features", window.$fxhashFeatures);
+//console.log("fxhash features", window.$fxhashFeatures);
 
 
-//2) generate random data for the 3d scene or 2d drawing ONCE before drawing
-
-
-//3) Initialize three.js scene and start the render loop
+//2) Initialize three.js scene and start the render loop
 //all data driving geometry and materials and whatever else should be generated in step 2
 
 //scene & camera
@@ -57,8 +48,6 @@ let camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHe
 camera.position.set( 3, 3, 3 );
 
 //lights
-const light = new THREE.HemisphereLight( 0xfffff, 0x3b3b3b, 0.01 );
-//scene.add( light );
 const p1 = new THREE.PointLight( 0x3b3b3b, 0.01);
 p1.position.set( 3, 3, 3);
 scene.add(p1);
@@ -70,7 +59,11 @@ scene.add(amb);
 
 // controls
 let controls = new OrbitControls( camera, renderer.domElement );
-
+controls.enableDamping=true;
+controls.dampingFactor = 0.2;
+controls.autoRotate= true;
+controls.maxDistance = 7;
+controls.minDistance = 1;
 //parametric geometry provides points for boxes
 const geometry = new ParametricGeometry( ParametricGeometries.mobius3d,feet.density.value2, feet.density.value1 );
 geometry.rotateY(0.25);
