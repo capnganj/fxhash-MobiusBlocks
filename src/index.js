@@ -49,7 +49,7 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 let camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.01, 1000 );
-camera.position.set( 3, 3, 3 );
+camera.position.set( 3.5, 3.5, 3.5 );
 
 //lights
 const p1 = new THREE.PointLight( 0xcccccc, 1);
@@ -68,7 +68,7 @@ let controls = new OrbitControls( camera, renderer.domElement );
 controls.enableDamping=true;
 controls.dampingFactor = 0.2;
 controls.autoRotate= true;
-controls.maxDistance = 7;
+controls.maxDistance = 9;
 controls.minDistance = 1;
 //parametric geometry provides points for boxes
 const geometry = new ParametricGeometry( ParametricGeometries.mobius3d,feet.density.value2, feet.density.value1 );
@@ -76,7 +76,7 @@ geometry.rotateY(0.25);
 geometry.computeBoundingBox();
 
 //placeholder material for testing
-const material = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
+//const material = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
 
 //array of mesh phong materials
 let materials = [];
@@ -95,6 +95,15 @@ for (let i = 0; i < 1; i+=0.01) {
 //box geometry to hang on points
 const boxer = new THREE.BoxGeometry(feet.boxSize.value, feet.boxSize.value, feet.boxSize.value);
 
+const matt = new THREE.MeshStandardMaterial({roughness: 0});
+
+//instanced mesh is used for drawing in the sketch -- way faster!
+const iMesh = new THREE.InstancedMesh(boxer, matt, geometry.attributes.position.length/3);
+scene.add(iMesh);
+
+//this scene is used for export
+const exportScene = new THREE.Scene();
+
 //loop over geometry points and make boxes
 for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
   //pick a semi-random material
@@ -110,6 +119,7 @@ for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
     0, 
     99
   );
+  //this is the material/color index
   let mi = Math.round(k)
   if(mi > materials.length-1){
     mi = materials.length-1;
@@ -117,6 +127,8 @@ for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
   if(mi < 0 ){
     mi = 0;
   }
+
+  //instead of making a new mesh, set the color and matrix of the ith meshInstance
 
   const obj = new THREE.Mesh( boxer, materials[mi]);
   obj.position.x =  geometry.attributes.position.array[i];
@@ -126,8 +138,17 @@ for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
   obj.rotation.x = geometry.attributes.position.array[i] * feet.rotation.value;
   obj.rotation.y = geometry.attributes.position.array[i+1] * feet.rotation.value;
   obj.rotation.z = geometry.attributes.position.array[i+2] * feet.rotation.value;
-  scene.add(obj);
+  exportScene.add(obj);
+
+  const matrix = new THREE.Matrix4();
+  matrix.makeRotationFromEuler(obj.rotation);
+  matrix.setPosition(obj.position);
+ 
+
+  iMesh.setColorAt(i/3, new THREE.Color(colors[mi].r/255, colors[mi].g/255, colors[mi].b/255));
+  iMesh.setMatrixAt(i/3, matrix);
 }
+iMesh.instanceMatrix.needsUpdate = true;
 
 //set the background colors 
 let bod = document.body;
@@ -150,7 +171,7 @@ function downloadGlb(event){
 
     // Parse the input and generate the glTF output
     exporter.parse(
-      scene,
+      exportScene,
       // called when the gltf has been generated
       function ( gltf ) {
 

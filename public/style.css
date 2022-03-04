@@ -1,5 +1,5 @@
 body {
-  background-image: linear-gradient(darkGrey, black);
+  background-color: whitesmoke;
 
   /* leave it to hide the scrollbars */
   overflow: hidden;
