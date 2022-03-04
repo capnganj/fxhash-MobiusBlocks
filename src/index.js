@@ -60,8 +60,6 @@ p2.position.set( -5, -3, -5);
 scene.add(p2);
 const hem = new THREE.HemisphereLight( 0xcccccc, 0xdedede, 0.666);
 scene.add(hem);
-//const amb = new THREE.AmbientLight(0xdedede, 1);
-//scene.add(amb);
 
 // controls
 let controls = new OrbitControls( camera, renderer.domElement );
@@ -70,6 +68,8 @@ controls.dampingFactor = 0.2;
 controls.autoRotate= true;
 controls.maxDistance = 9;
 controls.minDistance = 1;
+
+
 //parametric geometry provides points for boxes
 const geometry = new ParametricGeometry( ParametricGeometries.mobius3d,feet.density.value2, feet.density.value1 );
 geometry.rotateY(0.25);
@@ -95,9 +95,10 @@ for (let i = 0; i < 1; i+=0.01) {
 //box geometry to hang on points
 const boxer = new THREE.BoxGeometry(feet.boxSize.value, feet.boxSize.value, feet.boxSize.value);
 
-const matt = new THREE.MeshStandardMaterial({roughness: 0});
+
 
 //instanced mesh is used for drawing in the sketch -- way faster!
+const matt = new THREE.MeshStandardMaterial({roughness: 0});
 const iMesh = new THREE.InstancedMesh(boxer, matt, geometry.attributes.position.length/3);
 scene.add(iMesh);
 
@@ -130,6 +131,7 @@ for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
 
   //instead of making a new mesh, set the color and matrix of the ith meshInstance
 
+  //this object used for export scene and to snag the matrices
   const obj = new THREE.Mesh( boxer, materials[mi]);
   obj.position.x =  geometry.attributes.position.array[i];
   obj.position.y =  geometry.attributes.position.array[i+1];
@@ -138,12 +140,13 @@ for (let i = 0; i < geometry.attributes.position.array.length; i = i+3) {
   obj.rotation.x = geometry.attributes.position.array[i] * feet.rotation.value;
   obj.rotation.y = geometry.attributes.position.array[i+1] * feet.rotation.value;
   obj.rotation.z = geometry.attributes.position.array[i+2] * feet.rotation.value;
+
+  //export scene only
   exportScene.add(obj);
 
   const matrix = new THREE.Matrix4();
   matrix.makeRotationFromEuler(obj.rotation);
   matrix.setPosition(obj.position);
- 
 
   iMesh.setColorAt(i/3, new THREE.Color(colors[mi].r/255, colors[mi].g/255, colors[mi].b/255));
   iMesh.setMatrixAt(i/3, matrix);
@@ -194,7 +197,7 @@ function downloadGlb(event){
 
 const link = document.createElement( 'a' );
 link.style.display = 'none';
-document.body.appendChild( link ); // Firefox workaround, see #6594
+document.body.appendChild( link ); 
 
 			function save( blob, filename ) {
 
