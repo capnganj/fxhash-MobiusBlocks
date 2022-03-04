@@ -107,9 +107,9 @@ class StonerSculpturesFeatures {
         g = (255 - g).toString(16);
         b = (255 - b).toString(16);
         // pad each with zeros and return
-        let inverted = color("#" + padZero(r) + padZero(g) + padZero(b)).rgb().darker(1.5);
+        let inverted = color("#" + padZero(r) + padZero(g) + padZero(b)).rgb();
         let desaturated = hsl(inverted);
-        desaturated.s -= 0.3;
+        desaturated.s -= 0.7;
         return color(desaturated).rgb();
 
         function padZero(str, len) {

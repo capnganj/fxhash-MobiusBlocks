@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import { ParametricGeometry } from './ParametricGeometry';
 import { ParametricGeometries } from './ParametricGeometries';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 
 //1) - generate fxhash features - global driving parameters
 //new featuresClass
@@ -51,14 +52,16 @@ let camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHe
 camera.position.set( 3, 3, 3 );
 
 //lights
-const p1 = new THREE.PointLight( 0x3b3b3b, 0.01);
-p1.position.set( 3, 3, 3);
+const p1 = new THREE.PointLight( 0xcccccc, 1);
+p1.position.set( 5, 5, 5);
 scene.add(p1);
-const p2 = new THREE.PointLight( 0x3b3b3b, 0.01);
-p2.position.set( -3, -3, -3);
+const p2 = new THREE.PointLight( 0xcccccc, 1);
+p2.position.set( -5, -3, -5);
 scene.add(p2);
-const amb = new THREE.AmbientLight(0x3b3b3b, 0.01);
-scene.add(amb);
+const hem = new THREE.HemisphereLight( 0xcccccc, 0xdedede, 0.666);
+scene.add(hem);
+//const amb = new THREE.AmbientLight(0xdedede, 1);
+//scene.add(amb);
 
 // controls
 let controls = new OrbitControls( camera, renderer.domElement );
@@ -81,11 +84,13 @@ let colors = [];
 for (let i = 0; i < 1; i+=0.01) {
   const d3RgbColor = feet.interpolateFn(i);
   colors.push(d3RgbColor);
-  const mat = new THREE.MeshLambertMaterial({
-    color: new THREE.Color(d3RgbColor.r, d3RgbColor.g, d3RgbColor.b)
+  const mat = new THREE.MeshStandardMaterial({
+    color: new THREE.Color(d3RgbColor.r/255, d3RgbColor.g/255, d3RgbColor.b/255),
+    roughness: 0
   });
   materials.push(mat);
 }
+//console.log(materials);
 
 //box geometry to hang on points
 const boxer = new THREE.BoxGeometry(feet.boxSize.value, feet.boxSize.value, feet.boxSize.value);
@@ -133,11 +138,59 @@ bod.style.backgroundImage = 'linear-gradient(' + rot + 'deg,' + feet.invertColor
 
 //set up resize listener and let it rip!
 window.addEventListener( 'resize', onWindowResize );
+window.addEventListener( 'keyup', downloadGlb, false);
 animate();
 
+//download glb stuff
+function downloadGlb(event){
+  const key = event.which;
+  if(key == 71){
+    // Instantiate a exporter
+    const exporter = new GLTFExporter();
 
+    // Parse the input and generate the glTF output
+    exporter.parse(
+      scene,
+      // called when the gltf has been generated
+      function ( gltf ) {
 
-// animation
+        //console.log( gltf );
+        //downloadJSON( gltf );
+        saveArrayBuffer(gltf, fxhash.toString()+'.glb');
+
+      },
+      // called when there is an error in the generation
+      function ( error ) {
+
+        console.log( 'An error happened' );
+
+      },
+      { binary: true}
+    );
+  }
+
+}
+
+const link = document.createElement( 'a' );
+link.style.display = 'none';
+document.body.appendChild( link ); // Firefox workaround, see #6594
+
+			function save( blob, filename ) {
+
+				link.href = URL.createObjectURL( blob );
+				link.download = filename;
+				link.click();
+
+				// URL.revokeObjectURL( url ); breaks Firefox...
+
+			}
+			function saveArrayBuffer( buffer, filename ) {
+
+				save( new Blob( [ buffer ], { type: 'application/octet-stream' } ), filename );
+
+			}
+
+// threejs animation stuff
 function onWindowResize() {
 
   camera.aspect = window.innerWidth / window.innerHeight;
