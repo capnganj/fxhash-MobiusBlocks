@@ -25,7 +25,7 @@ window.$fxhashFeatures = {
   "Box Size": feet.boxSize.tag,
   "Density": feet.density.tag
 };
-
+let previewed = false;
 
 //from fxhash webpack boilerplate
 // these are the variables you can use as inputs to your algorithms
@@ -234,13 +234,13 @@ function animate() {
 
 }
 
-let previewed = false;
+
 
 function render() {
 
   renderer.render( scene, camera );
 
-  if(!previewed){
+  if(previewed == false){
     fxpreview();
     previewed = true;
   } 
